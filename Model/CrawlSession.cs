@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net;
 using HtmlAgilityPack;
 using OfficeOpenXml;
 
@@ -13,15 +14,22 @@ namespace YTY.LjCrawl.Model
 {
   public class CrawlSession
   {
+    /// <summary>
+    /// Timespan between http requests, in millisecond per request
+    /// </summary>
+    public int Frequency { get; set; } = 5000;
+
     public ObservableCollection<District> Districts { get; } = new ObservableCollection<District>();
 
     public async Task StartCrawl()
     {
-      var client = new HttpClient { BaseAddress = new Uri("http://bj.lianjia.com/ershoufang") };
+      var handler = new WebRequestHandler {UseCookies = true};
+      var client = new HttpClient(handler) { BaseAddress = new Uri("http://bj.lianjia.com/ershoufang") };
       client.DefaultRequestHeaders.Add("User-Agent",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063");
 
       var rootRaw = await client.GetStringAsync("");
+      Console.WriteLine(handler.CookieContainer.GetCookies(client.BaseAddress));
       var rootDoc = new HtmlDocument();
       rootDoc.LoadHtml(rootRaw);
       foreach (var districtNode in rootDoc.DocumentNode.SelectNodes(
@@ -29,13 +37,13 @@ namespace YTY.LjCrawl.Model
       {
         var district = new District { Name = districtNode.InnerText };
         Districts.Add(district);
-        await Task.Delay(2000);
+        await Task.Delay(Frequency);
         var districtRaw = await client.GetStringAsync(districtNode.Attributes["href"].Value);
         var districtDoc = new HtmlDocument();
         districtDoc.LoadHtml(districtRaw);
         foreach (var regionNode in districtDoc.DocumentNode.SelectNodes("html/body/div[@class='m-filter']/div[@class='position']/dl[2]/dd/div[@data-role='ershoufang']/div[2]/a"))
         {
-          await Task.Delay(2000);
+          await Task.Delay(Frequency);
           var path = regionNode.Attributes["href"].Value;
           var regionRaw = await client.GetStringAsync(path);
           var regionDoc = new HtmlDocument();
@@ -51,7 +59,7 @@ namespace YTY.LjCrawl.Model
           district.Regions.Add(region);
           for (var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
           {
-            await Task.Delay(2000);
+            await Task.Delay(Frequency);
             var pageRaw = await client.GetStringAsync($"{path}/pg{pageIndex}");
             var pageDoc = new HtmlDocument();
             pageDoc.LoadHtml(pageRaw);

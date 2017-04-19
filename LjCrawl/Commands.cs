@@ -25,8 +25,15 @@ namespace YTY.LjCrawl
       public async void Execute(object parameter)
       {
         var session = parameter as CrawlSession;
-        await session.StartCrawl();
-        MessageBox.Show(Application.Current.MainWindow, "完成数据抓取，可以点击导出");
+        try
+        {
+          await session.StartCrawl();
+          MessageBox.Show(Application.Current.MainWindow, "完成数据抓取，可以点击导出");
+        }
+        catch
+        {
+          MessageBox.Show(Application.Current.MainWindow, "抓取过程有错误，但可以导出现有结果");
+        }
       }
 
       public event EventHandler CanExecuteChanged;

@@ -5,30 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YTY.LjCrawl"
         mc:Ignorable="d"
-        Title="MainWindow"
-        Height="350"
-        Width="525"
+        Title="链家爬虫_北京"
+        Height="450"
+        Width="800"
         DataContext="{StaticResource CrawlSession}">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"></RowDefinition>
       <RowDefinition Height="*"></RowDefinition>
     </Grid.RowDefinitions>
-    <UniformGrid Grid.Row="0"
-                 Columns="2">
-      <UniformGrid.Resources>
+    <Grid Grid.Row="0">
+      <Grid.Resources>
+        <Style TargetType="TextBlock">
+          <Setter Property="VerticalAlignment"
+                  Value="Center"></Setter>
+        </Style>
         <Style TargetType="Button">
           <Setter Property="Margin"
                   Value="5"></Setter>
           <Setter Property="Padding"
                   Value="5"></Setter>
         </Style>
-      </UniformGrid.Resources>
-      <Button Command="local:Commands.StartCrawl"
+      </Grid.Resources>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0">发起请求间隔：</TextBlock>
+      <TextBox Grid.Column="1"
+               VerticalAlignment="Center"
+               Text="{Binding Frequency,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+      <TextBlock Grid.Column="2">毫秒/次请求</TextBlock>
+      <Button Grid.Column="3"
+              Command="local:Commands.StartCrawl"
               CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=DataContext}">开始</Button>
-      <Button Command="local:Commands.ExportToExcel"
-              CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=DataContext}">导出</Button>
-    </UniformGrid>
+      <Button Grid.Column="4"
+              Command="local:Commands.ExportToExcel"
+              CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=DataContext}">导出 Excel</Button>
+    </Grid>
     <ScrollViewer Grid.Row="1">
       <ItemsControl ItemsSource="{Binding Districts}">
         <ItemsControl.ItemTemplate>
@@ -54,7 +71,13 @@
                               BorderThickness="2"
                               Margin="5">
                         <Grid>
-                          <ListView Grid.Row="0"
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <ListView Grid.Column="0"
+                                    Grid.ColumnSpan="3"
                                     ItemsSource="{Binding Houses}">
                             <ListView.View>
                               <GridView>
@@ -128,10 +151,9 @@
                               </GridView>
                             </ListView.View>
                           </ListView>
-                          <Viewbox MaxWidth="300">
-                            <TextBlock  Foreground="#7fbbbbbb"
-                                        Text="{Binding Name}"
-                                        HorizontalAlignment="Center"></TextBlock>
+                          <Viewbox Grid.Column="1">
+                            <TextBlock  Foreground="#3f000000"
+                                        Text="{Binding Name}"></TextBlock>
                           </Viewbox>
                         </Grid>
                       </Border>
