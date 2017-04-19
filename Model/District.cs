@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace YTY.LjCrawl
+namespace YTY.LjCrawl.Model
 {
   public class District
   {

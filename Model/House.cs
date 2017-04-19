@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YTY.LjCrawl
+namespace YTY.LjCrawl.Model
 {
   public class House
   {
@@ -20,7 +20,7 @@ namespace YTY.LjCrawl
 
     public int TotalStories { get; set; }
 
-    public int Year { get; set; }
+    public int? Year { get; set; }
 
     public string BuildingType { get; set; }
 

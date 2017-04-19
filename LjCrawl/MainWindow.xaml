@@ -1,0 +1,148 @@
+﻿<Window x:Class="YTY.LjCrawl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YTY.LjCrawl"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="350"
+        Width="525"
+        DataContext="{StaticResource CrawlSession}">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <UniformGrid Grid.Row="0"
+                 Columns="2">
+      <UniformGrid.Resources>
+        <Style TargetType="Button">
+          <Setter Property="Margin"
+                  Value="5"></Setter>
+          <Setter Property="Padding"
+                  Value="5"></Setter>
+        </Style>
+      </UniformGrid.Resources>
+      <Button Command="local:Commands.StartCrawl"
+              CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=DataContext}">开始</Button>
+      <Button Command="local:Commands.ExportToExcel"
+              CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=DataContext}">导出</Button>
+    </UniformGrid>
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl ItemsSource="{Binding Districts}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border BorderBrush="Aquamarine"
+                    BorderThickness="1"
+                    Margin="3">
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="auto"></RowDefinition>
+                  <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="{Binding Name}"
+                           FontSize="30"
+                           HorizontalAlignment="Center"
+                           Margin="5"></TextBlock>
+                <ItemsControl Grid.Row="1"
+                              ItemsSource="{Binding Regions}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border BorderBrush="DodgerBlue"
+                              BorderThickness="2"
+                              Margin="5">
+                        <Grid>
+                          <ListView Grid.Row="0"
+                                    ItemsSource="{Binding Houses}">
+                            <ListView.View>
+                              <GridView>
+                                <GridViewColumn Header="Id">
+                                  <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                      <TextBlock>
+                                        <Hyperlink Command="local:Commands.HyperlinkByLjId"
+                                                   CommandParameter="{Binding Id}">
+                                          <Run Text="{Binding Id}"></Run>
+                                        </Hyperlink>
+                                      </TextBlock>
+                                    </DataTemplate>
+                                  </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="小区"
+                                                DisplayMemberBinding="{Binding Block}"></GridViewColumn>
+                                <GridViewColumn Header="户型"
+                                                DisplayMemberBinding="{Binding HouseType}"></GridViewColumn>
+                                <GridViewColumn Header="面积(㎡)"
+                                                DisplayMemberBinding="{Binding Area}"></GridViewColumn>
+                                <GridViewColumn Header="朝向"
+                                                DisplayMemberBinding="{Binding Direction,Converter={x:Static local:Converters.HouseDirectionToString}}"></GridViewColumn>
+                                <GridViewColumn Header="装修"
+                                                DisplayMemberBinding="{Binding Decoration}"></GridViewColumn>
+                                <GridViewColumn Header="楼层"
+                                                DisplayMemberBinding="{Binding Story}"></GridViewColumn>
+                                <GridViewColumn Header="总层数"
+                                                DisplayMemberBinding="{Binding TotalStories}"></GridViewColumn>
+                                <GridViewColumn Header="建成年份"
+                                                DisplayMemberBinding="{Binding Year}"></GridViewColumn>
+                                <GridViewColumn Header="建筑类型"
+                                                DisplayMemberBinding="{Binding BuildingType}"></GridViewColumn>
+                                <GridViewColumn Header="关注人数"
+                                                DisplayMemberBinding="{Binding NumFollowers}"></GridViewColumn>
+                                <GridViewColumn Header="带看次数"
+                                                DisplayMemberBinding="{Binding NumVisitors}"></GridViewColumn>
+                                <GridViewColumn Header="标签">
+                                  <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                      <Grid>
+                                        <TextBlock x:Name="txb"></TextBlock>
+                                      </Grid>
+                                      <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Tags}"
+                                                     Value="Certificate5Years">
+                                          <Setter TargetName="txb"
+                                                  Property="Background"
+                                                  Value="LightPink"></Setter>
+                                          <Setter TargetName="txb"
+                                                  Property="Text"
+                                                  Value="满五年"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Tags}"
+                                                     Value="Certificate2Years">
+                                          <Setter TargetName="txb"
+                                                  Property="Background"
+                                                  Value="LightGreen"></Setter>
+                                          <Setter TargetName="txb"
+                                                  Property="Text"
+                                                  Value="满两年"></Setter>
+                                        </DataTrigger>
+                                      </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                  </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="总价(万元)"
+                                                DisplayMemberBinding="{Binding Price}"></GridViewColumn>
+                                <GridViewColumn Header="单价(元/㎡)"
+                                                DisplayMemberBinding="{Binding UnitPrice}"></GridViewColumn>
+                              </GridView>
+                            </ListView.View>
+                          </ListView>
+                          <Viewbox MaxWidth="300">
+                            <TextBlock  Foreground="#7fbbbbbb"
+                                        Text="{Binding Name}"
+                                        HorizontalAlignment="Center"></TextBlock>
+                          </Viewbox>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </Grid>
+</Window>
