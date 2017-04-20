@@ -6,6 +6,6 @@ namespace YTY.LjCrawl.Model
   {
     public string Name { get; set; }
 
-    public ObservableCollection<Region> Regions { get; } = new ObservableCollection<Region>();
+    public ObservableCollection<Block> Blocks { get; } = new ObservableCollection<Block>();
   }
 }

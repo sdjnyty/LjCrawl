@@ -4,9 +4,7 @@ namespace YTY.LjCrawl.Model
 {
   public class House
   {
-    public long Id { get; set; }
-
-    public string Block { get; set; }
+    public string Id { get; set; }
 
     public string HouseType { get; set; }
 

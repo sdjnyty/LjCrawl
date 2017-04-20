@@ -64,21 +64,14 @@
                            HorizontalAlignment="Center"
                            Margin="5"></TextBlock>
                 <ItemsControl Grid.Row="1"
-                              ItemsSource="{Binding Regions}">
+                              ItemsSource="{Binding Blocks}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
                       <Border BorderBrush="DodgerBlue"
                               BorderThickness="2"
                               Margin="5">
                         <Grid>
-                          <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                          </Grid.ColumnDefinitions>
-                          <ListView Grid.Column="0"
-                                    Grid.ColumnSpan="3"
-                                    ItemsSource="{Binding Houses}">
+                          <ListView ItemsSource="{Binding Houses}">
                             <ListView.View>
                               <GridView>
                                 <GridViewColumn Header="Id">
@@ -93,8 +86,6 @@
                                     </DataTemplate>
                                   </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="小区"
-                                                DisplayMemberBinding="{Binding Block}"></GridViewColumn>
                                 <GridViewColumn Header="户型"
                                                 DisplayMemberBinding="{Binding HouseType}"></GridViewColumn>
                                 <GridViewColumn Header="面积(㎡)"
@@ -151,9 +142,10 @@
                               </GridView>
                             </ListView.View>
                           </ListView>
-                          <Viewbox Grid.Column="1">
+                          <Viewbox StretchDirection="DownOnly">
                             <TextBlock  Foreground="#3f000000"
-                                        Text="{Binding Name}"></TextBlock>
+                                        Text="{Binding Name}"
+                                        FontSize="100"></TextBlock>
                           </Viewbox>
                         </Grid>
                       </Border>
